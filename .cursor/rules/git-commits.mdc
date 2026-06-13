@@ -1,0 +1,45 @@
+---
+description: Git commit message rules for My Golf Diary
+alwaysApply: true
+---
+
+# Git Commit Messages
+
+When the user asks to commit changes, derive the commit message from keywords in their natural language request.
+
+## Format
+
+```
+<type>: <keyword1>, <keyword2>, <keyword3>
+```
+
+## Type mapping (from user intent)
+
+- `feat` — 디자인, 만들, 추가, 구현, UI, 화면, 탭
+- `refactor` — 수정, 나눠, 분리, 리팩, 정리, 변경
+- `fix` — 버그, 오류, fix, 고치
+- `docs` — 문서, README
+- `chore` — 설정, 연동, git, 기타
+
+## Keyword rules
+
+- Extract 3–6 meaningful nouns/verbs from the user's Korean or English request
+- Skip filler: 해줘, 그리고, 응, 싶어, 지금, 작업, etc.
+- Use lowercase English types; keywords may stay in Korean
+
+## Examples
+
+| User request | Commit message |
+|---|---|
+| "홈 대시보드 화면 디자인해줘" | `feat: 홈, 대시보드, 화면, 디자인` |
+| "레슨이랑 라운드 탭을 나눠줘" | `refactor: 레슨, 라운드, 탭, 나눠` |
+| "github 연동 해주고 커밋 관리" | `chore: github, 연동, 커밋, 관리` |
+
+## Commands
+
+Run from `my_golf_diary`:
+
+```powershell
+.\scripts\commit-keywords.ps1 "사용자가 방금 입력한 자연어 요청"
+.\scripts\commit-keywords.ps1 "요청 문장" -Push
+```
