@@ -4,8 +4,12 @@ param(
     [switch]$Private
 )
 
-$git = "C:\Program Files\Git\bin\git.exe"
-$gh = "C:\Program Files\GitHub CLI\gh.exe"
+$gitBin = "C:\Program Files\Git\bin"
+$ghBin = "C:\Program Files\GitHub CLI"
+$env:PATH = "$gitBin;$ghBin;" + $env:PATH
+
+$git = Join-Path $gitBin "git.exe"
+$gh = Join-Path $ghBin "gh.exe"
 $repoRoot = Split-Path $PSScriptRoot -Parent
 Set-Location $repoRoot
 
@@ -32,9 +36,13 @@ if ($LASTEXITCODE -ne 0) {
 $visibility = if ($Private) { "--private" } else { "--public" }
 
 Write-Host "Creating GitHub repository: $GitHubUser/$RepoName" -ForegroundColor Cyan
-& $gh repo create "$GitHubUser/$RepoName" $visibility --source=. --remote=origin --description "My Golf Diary - Flutter golf practice and round tracking app" 2>&1
+& $gh repo view "$GitHubUser/$RepoName" 2>$null
+if ($LASTEXITCODE -ne 0) {
+    & $gh repo create "$GitHubUser/$RepoName" $visibility --description "My Golf Diary - Flutter golf practice and round tracking app"
+}
 
 & $git branch -M main
+& $git remote set-url origin $remoteUrl
 & $git push -u origin main
 
 Write-Host "GitHub setup complete." -ForegroundColor Green
